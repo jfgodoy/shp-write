@@ -6,9 +6,17 @@ var write = require('./write'),
 module.exports = function(gj, options) {
 
     var zip = new JSZip(),
-        options = options || {},
-        layers = zip.folder(options.folder ? options.folder : 'layers'),
-        zipOpts = {compression: 'STORE'};
+        zipOpts = {compression: 'STORE'},
+        layers;
+
+    options = options || {};
+
+    if (options.folder === false) {
+        layers = zip;
+    } else {
+        layers = zip.folder(options.folder ? options.folder : 'layers');
+    }
+
 
     [geojson.point(gj), geojson.line(gj), geojson.polygon(gj)]
         .forEach(function(l) {
