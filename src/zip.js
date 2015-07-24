@@ -7,7 +7,8 @@ module.exports = function(gj, options) {
 
     var zip = new JSZip(),
         options = options || {},
-        layers = zip.folder(options.folder ? options.folder : 'layers');
+        layers = zip.folder(options.folder ? options.folder : 'layers'),
+        zipOpts = {compression: 'STORE'};
 
     [geojson.point(gj), geojson.line(gj), geojson.polygon(gj)]
         .forEach(function(l) {
@@ -29,5 +30,10 @@ module.exports = function(gj, options) {
         }
     });
 
-    return zip.generate({compression:'STORE'});
+
+    for (var k in options.zipOpts) {
+        zipOpts[k] = options.zipOpts[k];
+    }
+
+    return zip.generate(zipOpts);
 };
